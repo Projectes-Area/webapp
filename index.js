@@ -1,7 +1,10 @@
 let validat = false;
-let usuari, contrasenya, seccio_origen, mapa, geoID;
+let usuari, contrasenya, seccio_origen, mapa, geoID, diagrama, rebudes;
 let storage = window.localStorage;
 let scriptURL = "https://script.google.com/macros/s/AKfycbwO6FnBnaBmxrzPRyLDhV8D6pW7Pe6V8-SYIdSHZXMmg8JqjJwQz8H8zA8wl3U6u2pW/exec";
+let model, webcam, prediccions, maxPrediccions;
+let canvas_creat = false;
+let valors = [[],[]];
 
 window.onload = () => { 
     let base_de_dades = storage.getItem("base_de_dades");   
@@ -150,6 +153,9 @@ function canvia_seccio(num_boto) {
     if (num_boto == 4) {
         mapa.invalidateSize();
     }
+    if (num_boto == 6) {
+        mostra_diagrama();
+    }
 }
 
 function desa_foto() {
@@ -282,3 +288,83 @@ function format_data(date) {
     if (segon.length < 2) segon = '0' + segon;
     return dia + '/' + mes + '/' + any + ' - ' + hora + ':' + minut + ':' + segon;
 }
+
+async function inicia_video() {
+    const codi_model = "LTgv647dQ"
+    const tmURL = "https://teachablemachine.withgoogle.com/models/" + codi_model;
+    const modelURL = tmURL + "/model.json";
+    const metadataURL = tmURL + "/metadata.json";
+    model = await tmImage.load(modelURL, metadataURL);
+    maxPrediccions = model.getTotalClasses();
+
+    webcam = new tmImage.Webcam(300, 300, true);
+    await webcam.setup();
+    await webcam.play();
+    window.requestAnimationFrame(loop);
+
+    document.getElementById("icona_video").style.display = "none";
+    document.getElementById("coincidencia").style.display = "flex";
+    document.getElementById("webcam-container").appendChild(webcam.canvas);
+    prediccions = document.getElementById("prediccions");
+    for (let i = 0; i < maxPrediccions; i++) {
+        prediccions.appendChild(document.createElement("div"));
+    }
+}
+
+async function loop() {
+    webcam.update();
+    await prediu();
+    window.requestAnimationFrame(loop);
+}
+
+async function prediu() {
+    const prediccio = await model.predict(webcam.canvas);
+    for (let i = 0; i < maxPrediccions; i++) {
+        const classe = prediccio[i].className + ": " + prediccio[i].probability.toFixed(2);
+        prediccions.childNodes[i].innerHTML = classe;
+    }
+}
+
+function mostra_diagrama() {
+    if (!canvas_creat) {
+        diagrama = new Chart(document.getElementById("diagrama"), {
+            type : 'line',
+            data : {
+                labels : valors[0],
+                datasets : [
+                        {
+                            data : valors[1],
+                            label : "Nivell de llum",
+                            borderColor : "blue",
+                        }]
+            },
+        });
+        rebudes = 0;
+        peticio();
+        setInterval(peticio, 20000);  
+        canvas_creat = true;
+    } 
+}
+
+function peticio() {
+    const canal = "2414728";
+    const camp = "1";
+    const max_dades = 10;
+    const ts_url = "https://api.thingspeak.com/channels/" + canal + "/fields/" + camp + "/last.json"
+    fetch(ts_url)
+        .then(resposta => resposta.json())
+        .then(resposta => {
+            rebudes++;
+            let valor = Number(resposta["field1"]);
+            document.getElementById("div_valor").innerHTML = valor;
+            if (valors[0].length >= max_dades) {
+                valors[0].shift();
+                valors[1].shift();
+            }
+            valors[0].push(rebudes)
+            valors[1].push(valor);
+            diagrama.update();
+        });
+}
+
+

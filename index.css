@@ -43,6 +43,11 @@ body {
     flex-direction: column;
     justify-content: space-around;
 }
+#seccio_5, #seccio_6 {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 #inici_sessio {
     display: flex;
     align-items: center;
@@ -74,7 +79,7 @@ body {
     display: flex;
     height: 8vmax;
 }
-#menu i{
+#menu i {
     flex: 1;
     display: flex;
     justify-content: center;
@@ -105,7 +110,7 @@ body {
     justify-content: space-evenly;
     align-items: center;
 }
-#div_control i{
+#div_control i, #icona_video {
     cursor: pointer;
     font-size: 20vmin;
     color: green;
@@ -181,6 +186,24 @@ body {
     max-width: 95vmin;
     max-height: 95vmax;
     cursor: pointer;
+}
+#prediccions {
+    margin: 1vh;
+    font-size: 3vh;
+}
+#coincidencia {
+    display: none;
+    font-size: 4vh;
+    margin: 1vh;
+}
+#div_diagrama {
+    width: 80vmin;
+    font-size: 5vh;   
+    text-align: center;
+}
+#div_valor {
+    font-size: 15vh; 
+    margin-top: 5vh;  
 }
 .ocult {
     display: none !important;
