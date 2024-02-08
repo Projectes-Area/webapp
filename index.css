@@ -188,18 +188,18 @@ body {
     cursor: pointer;
 }
 #webcam-container {
-    margin: 2vh;
+    margin: 2vmax;
 }
 #reconeixement {
     text-align:center;
 }
 #coincidencia {
     display: none;
-    font-size: 4vh;
-    margin-bottom: 1vh;
+    font-size: 4vmax;
+    margin-bottom: 1vmax;
 }
 #prediccions {
-    font-size: 3vh;
+    font-size: 3vmax;
 }
 #div_diagrama {
     width: 80vmin;

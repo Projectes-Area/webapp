@@ -297,7 +297,7 @@ async function inicia_video() {
     model = await tmImage.load(modelURL, metadataURL);
     maxPrediccions = model.getTotalClasses();
 
-    webcam = new tmImage.Webcam(300, 300, true);
+    webcam = new tmImage.Webcam(250, 250, true);
     await webcam.setup();
     await webcam.play();
     window.requestAnimationFrame(loop);
