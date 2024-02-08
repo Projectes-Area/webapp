@@ -187,14 +187,19 @@ body {
     max-height: 95vmax;
     cursor: pointer;
 }
-#prediccions {
-    margin: 1vh;
-    font-size: 3vh;
+#webcam-container {
+    margin: 2vh;
+}
+#reconeixement {
+    text-align:center;
 }
 #coincidencia {
     display: none;
     font-size: 4vh;
-    margin: 1vh;
+    margin-bottom: 1vh;
+}
+#prediccions {
+    font-size: 3vh;
 }
 #div_diagrama {
     width: 80vmin;
@@ -241,7 +246,7 @@ body {
         width: 8vmax;
         height: auto;
     }
-    #seccio_2 {
+    #seccio_2, #seccio_5 {
         flex-direction: row;
     }
     #div_foto {
